@@ -92,22 +92,20 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     * Inserting new note in db
-     * and refreshing the list
+     * 在数据库中插入新笔记并刷新列表
      */
     private void createNote(String note) {
-        // inserting note in db and getting
-        // newly inserted note id
+        // 在数据库中插入笔记并获取新插入的笔记 ID
         long id = db.insertNote(note);
 
-        // get the newly inserted note from db
+        // 获得从数据库新插入的笔记
         Note n = db.getNote(id);
 
         if (n != null) {
-            // adding new note to array list at 0 position
+            // 将新笔记添加到数组列表的 0 位置
             notesList.add(0, n);
 
-            // refreshing the list
+            // 刷新列表
             mAdapter.notifyDataSetChanged();
 
             toggleEmptyNotes();
@@ -115,15 +113,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     * Updating note in db and updating
-     * item in the list by its position
+     * 更新数据库中的注释并按其位置更新列表中的项目
      */
     private void updateNote(String note, int position) {
         Note n = notesList.get(position);
-        // updating note text
+        // 更新笔记文本
         n.setNote(note);
 
-        // updating note in db
+        // 更新数据库中的笔记
         db.updateNote(n);
 
         // refreshing the list
@@ -173,9 +170,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     /**
-     * Shows alert dialog with EditText options to enter / edit a note.
-     * when shouldUpdate=true, it automatically displays old note and changes the
-     * button text to UPDATE
+     * 显示带有 EditText 选项的提示框以输入编辑注释。当 shouldUpdate=true 时，它会自动显示旧笔记并将按钮文本更改为UPDATE
      */
     private void showNoteDialog(final boolean shouldUpdate, final Note note, final int position) {
         LayoutInflater layoutInflaterAndroid = LayoutInflater.from(getApplicationContext());
@@ -211,7 +206,7 @@ public class MainActivity extends AppCompatActivity {
         alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Show toast message when no text is entered
+                // 未输入文本时显示吐司消息
                 if (TextUtils.isEmpty(inputNote.getText().toString())) {
                     Toast.makeText(MainActivity.this, "Enter note!", Toast.LENGTH_SHORT).show();
                     return;
@@ -219,12 +214,12 @@ public class MainActivity extends AppCompatActivity {
                     alertDialog.dismiss();
                 }
 
-                // check if user updating note
+                // 检查用户是否更新笔记
                 if (shouldUpdate && note != null) {
-                    // update note by it's id
+                    // 通过它的 id 更新笔记
                     updateNote(inputNote.getText().toString(), position);
                 } else {
-                    // create new note
+                    // 创建新笔记
                     createNote(inputNote.getText().toString());
                 }
             }
@@ -232,10 +227,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     * Toggling list and empty notes view
+     * 切换列表和空笔记视图
      */
     private void toggleEmptyNotes() {
-        // you can check notesList.size() > 0
+        // 你可以检查 notesList.size() > 0
 
         if (db.getNotesCount() > 0) {
             noNotesView.setVisibility(View.GONE);

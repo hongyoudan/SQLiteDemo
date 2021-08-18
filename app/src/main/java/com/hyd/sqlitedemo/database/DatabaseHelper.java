@@ -67,7 +67,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     public Note getNote(long id) {
-        // get readable database as we are not inserting anything
+        // 获取可读的数据库，因为我们没有插入任何内容
         SQLiteDatabase db = this.getReadableDatabase();
 
         Cursor cursor = db.query(Note.TABLE_NAME,
@@ -78,13 +78,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         if (cursor != null)
             cursor.moveToFirst();
 
-        // prepare note object
+        // 准备笔记对象
         Note note = new Note(
                 cursor.getInt(cursor.getColumnIndex(Note.COLUMN_ID)),
                 cursor.getString(cursor.getColumnIndex(Note.COLUMN_NOTE)),
                 cursor.getString(cursor.getColumnIndex(Note.COLUMN_TIMESTAMP)));
 
-        // close the db connection
+        // 关闭数据库连接
         cursor.close();
 
         return note;
@@ -93,14 +93,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public List<Note> getAllNotes() {
         List<Note> notes = new ArrayList<>();
 
-        // Select All Query
+        // 全局查询
         String selectQuery = "SELECT  * FROM " + Note.TABLE_NAME + " ORDER BY " +
                 Note.COLUMN_TIMESTAMP + " DESC";
 
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);
 
-        // looping through all rows and adding to list
+        // 循环遍历所有行并添加到列表
         if (cursor.moveToFirst()) {
             do {
                 Note note = new Note();
@@ -112,10 +112,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             } while (cursor.moveToNext());
         }
 
-        // close db connection
+        // 关闭数据库连接
         db.close();
 
-        // return notes list
+        // 返回笔记列表
         return notes;
     }
 
@@ -128,7 +128,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         cursor.close();
 
 
-        // return count
+        // 返回 count
         return count;
     }
 
@@ -138,7 +138,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
         values.put(Note.COLUMN_NOTE, note.getNote());
 
-        // updating row
+        // 更新行
         return db.update(Note.TABLE_NAME, values, Note.COLUMN_ID + " = ?",
                 new String[]{String.valueOf(note.getId())});
     }

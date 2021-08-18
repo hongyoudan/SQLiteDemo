@@ -1,48 +1,69 @@
-# 第一个样例：
+# SQLiteDemo
+
+<p align="left" style="">
+  <img src="https://img.shields.io/github/last-commit/hongyoudan/SQLiteDemo"></img>
+	<img src="https://img.shields.io/github/languages/count/hongyoudan/SQLiteDemo"></img>
+<img src="https://img.shields.io/github/stars/hongyoudan/SQLiteDemo?style=social"></img>
+<img src="https://img.shields.io/github/watchers/hongyoudan/SQLiteDemo?style=social"></img>
+</p>
+
+**整理不易，欢迎 `Star` 和 `Fork` ^_^ ，谢谢~~**
 
 
 
+## 前言
+
+Android 为了让我们能够更加方便地管理数据库，专门提供了一个 SQLiteOpenHelper 帮助
+类，借助这个类就可以经常简单地对数据库进⾏创建和升级。
+
+首先我们要知道 SQLiteOpenHelper 是一个抽象类，这意味着如果我们想要使用它的话，就需要创建一个自己的帮助类去继承它。 SQLiteOpenHelper 中有两个抽象方法，分别是 `onCreate()` 和 `onUpgrade()` ，我们必须在自己的帮助类里面重写这两个方法，然后分别在这两个方法中去实现创建、升级数据库的逻辑。
+
+SQLiteOpenHelper 中还有两个非常重要的实例方法 ，getReadableDatabase() 和 getWritableDatabase() 。这两个方法都可以创建或打开一个现有的数据库（如果数据库已存在则直接打开，否则创建一个新的数据库），并返回一个可对数据库进行读写操作的对象。
+
+不同的是，当数据库不可写入的时候（如磁盘空间已满） `getReadableDatabase()` 方法返回的对象将以只读的方式去打开数据库，而 `getWritableDatabase()` 方法则将出现异常。SQLiteOpenHelper 中有两个构造方法可供重写。
+
+这个构造方法中接收四个参数：
+
+- `Context`，这个没什么好说的，必须要有它才能对数据库进行操作
+
+- 数据库名，创建数据库时使用的就是这个指定的名称
+
+- 允许我们在查询数据的时候返回一个自定义的`Cursor`，一般都是传回null
+
+- 表示当前数据库的版本号， 可用于对数据库进行升级操作
+
+构建出 SQLiteOpenHelper 的实例之后，再调用它的`getReadableDatabase()`或`getWritableDatabase()`方法就能够创建数据库了，数据库文件会存放在`/data/data/<package name>/databases/`目录下。此时， 重写的`onCreate()`方法也会得到执行， 所以通常会在这里去处理一些创建表的逻辑。
 
 
 
+## 案例一
 
 
 
+### 项目截图
+
+| <img src="https://img-blog.csdnimg.cn/a3514cc4b9a442acad04cf1c4fc787c8.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQ0NDAyMTg0,size_16,color_FFFFFF,t_70#pic_center"></img> | <img src="https://img-blog.csdnimg.cn/b3653d100ce547578ea2248b2621cfe7.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQ0NDAyMTg0,size_16,color_FFFFFF,t_70#pic_center"></img> | <img src="https://img-blog.csdnimg.cn/8d746ba69da0450cb5feecc415ec5998.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQ0NDAyMTg0,size_16,color_FFFFFF,t_70#pic_center"></img> |
+| ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ |
+| <img src="https://img-blog.csdnimg.cn/c830e6a608404deca0f87019a5aa209e.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQ0NDAyMTg0,size_16,color_FFFFFF,t_70#pic_center"></img> | <img src="https://img-blog.csdnimg.cn/3cccfc64a68c44ab9d181162f7c95bff.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQ0NDAyMTg0,size_16,color_FFFFFF,t_70#pic_center"></img> | <img src="https://img-blog.csdnimg.cn/ef20af9a47c048fea670b73f78e36030.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQ0NDAyMTg0,size_16,color_FFFFFF,t_70#pic_center"></img> |
 
 
-# Demo2:
 
-Android为了让我们能够更加方便地管理数据库，专门提供了一个SQLiteOpenHelper帮助
-类，借助这个类就可以经常简单地对数据库进⾏创建和升级。既然有好东西可以直接使用，那
-我们当然要尝试一下了，下面我就将对SQLiteOpenHelper的基本用法进行介绍。
-  瘦先你要知道SQLiteOpenHelper是一个抽象类，这意味着如果我们想要使用它的话，就需要创建一个自己的帮助类去继承它。 SQLiteOpenHelper中有两个抽象方法，分别是onCreate()和onUpgrade()，我们必须在自己的帮助类里面重写这两个方法，然后分别在这两个方法中去实现创建、升级数据库的逻辑。SQLiteOpenHelper 中 还 有 两 个 非 常 重 要 的 实 例方 法 ， getReadableDatabase() 和getWritableDatabase()。这两个方法都可以创建或打开一个现有的数据库（如果数据库已存在则直接打开，否则创建一个新的数据库），并返回一个可对数据库进行读写操作的对象。不同的是，当数据库不可写入的时候（如磁盘空间已满） getReadableDatabase()方法返回的对象将以只读的方式去打开数据库，而getWritableDatabase()方法则将出现异常。SQLiteOpenHelper中有两个构造方法可供重写，一般使用参数少一点的那个构造方法即可。
+### 主要功能
 
-这个构造方法中接收四个参数，
+1. 新建文本内容
+2. 长按条目选择编辑或删除
 
-第一个参数是Context，这个没什么好说的，必须要有它才能对数据库进行操作。
 
-第二个参数是数据库名，创建数据库时使用的就是这个指定的名称。
 
-第三个参数允许我们在查询数据的时候返回一个自定义的Cursor，一般都是传回null。
+## 案例二
 
-第四个参数表示当前数据库的版本号， 可用于对数据库进行升级操作。
+**运用了Android SQLite的经典使用方法，这里直接贴上代码**
 
-构建出SQLiteOpenHelper的实例之后，再调用它的getReadableDatabase()或getWritableDatabase()方法就能够创建数据库了，数据库文件会存放在/data/data/<package name>/databases/目录下。此时， 重写的onCreate()方法也会得
-到执行， 所以通常会在这里去处理一些创建表的逻辑。
 
----------下面用一个实例来说明吧------------------------------------
 
-MyDatabaseHelper.java的代码如下：
+MyDatabaseHelper.java：
 
-```
- package yaowen.com.filepersistencetest;
-import android.content.Context;
-import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
-import android.widget.Toast;
-/**
- * Created by YAOWEN on 2015/9/17.
- */
+```java
 public class MyDatabaseHelper extends SQLiteOpenHelper {
     public static final String CREATE_BOOK = "create table book ("
             + "id integer primary key autoincrement, "
@@ -75,18 +96,9 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
 }
 ```
 
- MainActivity.java的代码如下：
+ MainActivity.java：
 
-```
-package yaowen.com.filepersistencetest;
-import android.content.ContentValues;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
-import android.view.View;
-import android.widget.Button;
+```java
 public class MainActivity extends AppCompatActivity {
     private MyDatabaseHelper dbHelper;
     private Button createDatabase, add_data, update_btn,
@@ -226,7 +238,7 @@ public class MainActivity extends AppCompatActivity {
 }
 ```
 
-main_activity.xml的代码入下：
+main_activity.xml：
 
 ```
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -267,14 +279,3 @@ main_activity.xml的代码入下：
 </LinearLayout>
 ```
 
-下面是程序运行效果图了：
-
- ![img](http://static.oschina.net/uploads/space/2015/1107/140817_X3bP_2391602.png)
-
-下面是程序运行是调试语句，也就是程序成功运行了！
-
-![img](http://static.oschina.net/uploads/space/2015/1107/140816_8yl7_2391602.png)
-
- 下面是shell命令查询的数据：（具体怎么用shell命令，自行百度了吧）
-
-![img](http://static.oschina.net/uploads/space/2015/1107/140817_9rfP_2391602.png)

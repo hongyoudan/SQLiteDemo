@@ -17,7 +17,7 @@ public class Note {
     private String timestamp;
 
 
-    // Create table SQL query
+    // 创建表 SQL 查询
     public static final String CREATE_TABLE =
             "CREATE TABLE " + TABLE_NAME + "("
                     + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
